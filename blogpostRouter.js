@@ -40,14 +40,14 @@ router.put("/:id", jsonParser, (req, res) => {
     }
   }
   if (req.params.id !== req.body.id) {
-    const message = (
-      `Request path id (${req.params.id}) and request body id `
+    const message = 
+      (`Request path id (${req.params.id}) and request body id `
       `(${req.body.id}) must match`);
 
     return res.status(400).send(message);
   }
 
-  const updatedItem = BlogPosts.update({title:req.body.title, content:req.body.content, author:req.body.author, publishDate:req.body.publishDate})
+  const updatedItem = BlogPosts.update({title:req.body.title, content:req.body.content, author:req.body.author, publishDate:req.body.publishDate, id:req.body.id})
   res.json(updatedItem).status(204)
 });
 
