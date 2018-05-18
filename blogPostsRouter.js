@@ -1,24 +1,23 @@
 const express = require('express');
-const app = express();
+const router = express.Router();
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
-const router = express.Router();
-const {BlogPosts} = require("./models.js");
+const { BlogPosts } = require("./models");
 
 BlogPosts.create('title', 'content', 'author', 'publishDate');
 
-router.get("/",(req, res) => {
+router.get("/", (req, res) => {
 
   res.json(BlogPosts.get());
 });
 
 router.post("/", jsonParser, (req, res) => {
   const requiredFields = ["title", "content", "author", "publishDate"];
-  for (let i = 0; i< requiredFields.length; i++){
- 
- 
+  for (let i = 0; i < requiredFields.length; i++) {
+
+
     const field = requiredFields[i];
-    if(!(field in req.body)){
+    if (!(field in req.body)) {
       const message = `No field: ${field}`;
 
       return res.status(400).send(message);
@@ -30,24 +29,24 @@ router.post("/", jsonParser, (req, res) => {
 
 router.put("/:id", jsonParser, (req, res) => {
   const requiredFields = ["title", "content", "author", "publishDate"];
-  for (let i = 0; i< requiredFields.length; i++){
- 
+  for (let i = 0; i < requiredFields.length; i++) {
+
     const field = requiredFields[i];
-    if(!(field in req.body)){
+    if (!(field in req.body)) {
       const message = `No field: ${field}`;
 
       return res.status(400).send(message);
     }
   }
   if (req.params.id !== req.body.id) {
-    const message = 
+    const message =
       (`Request path id (${req.params.id}) and request body id `
-      `(${req.body.id}) must match`);
+        `(${req.body.id}) must match`);
 
     return res.status(400).send(message);
   }
 
-  const updatedItem = BlogPosts.update({title:req.body.title, content:req.body.content, author:req.body.author, publishDate:req.body.publishDate, id:req.body.id})
+  const updatedItem = BlogPosts.update({ title: req.body.title, content: req.body.content, author: req.body.author, publishDate: req.body.publishDate, id: req.body.id })
   res.json(updatedItem).status(204)
 });
 
@@ -58,4 +57,4 @@ router.delete("/:id", (req, res) => {
   console.log('deleting');
 });
 
-module.exports=router;
+module.exports = router;
